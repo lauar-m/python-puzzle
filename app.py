@@ -47,46 +47,33 @@ def main(page: ft.Page):
         bounce_back(piece, e.control)
         e.control.update()
 
-    slot0 = ft.Container(
-        width=70, height=100, left=0, top=0, border=ft.border.all(1)
-    )
+    slots = []
+    for i in range(3):
+        for j in range(3):
+            slot = ft.Container(
+                width=70,
+                height=100,
+                left= j * 100,
+                top=i * 120,
+                border=ft.border.all(1)
+            )
+            slots.append(slot)
 
-    slot1 = ft.Container(
-        width=70, height=100, left=200, top=0, border=ft.border.all(1)
-    )
+    cards = []
+    for i in range(9):
+        card = ft.GestureDetector(
+            mouse_cursor=ft.MouseCursor.MOVE,
+            drag_interval=5,
+            on_pan_start=start_drag,
+            on_pan_update=drag,
+            on_pan_end=drop,
+            left=400,
+            top=i * 55,
+            content=ft.Container(bgcolor=ft.Colors.GREEN, width=70, height=100),
+        )
+        cards.append(card)
 
-    slot2 = ft.Container(
-        width=70, height=100, left=300, top=0, border=ft.border.all(1)
-    )
-
-    slots = [slot0, slot1, slot2]
-
-    card = ft.GestureDetector(
-        mouse_cursor=ft.MouseCursor.MOVE,
-        drag_interval=5,
-        on_pan_start=start_drag,
-        on_pan_update=drag,
-        on_pan_end=drop,
-        left=0,
-        top=0,
-        content=ft.Container(bgcolor=ft.Colors.GREEN, width=70, height=100),
-    )
-
-    card2 = ft.GestureDetector(
-        mouse_cursor=ft.MouseCursor.MOVE,
-        drag_interval=5,
-        on_pan_start=start_drag,
-        on_pan_update=drag,
-        on_pan_end=drop,
-        left=100,
-        top=0,
-        content=ft.Container(bgcolor=ft.Colors.GREEN, width=70, height=100),
-    )
-
-    controls = [slot0, slot1, slot2, card, card2]
-
-    place(card, slot0)
-    place(card2, slot0)
+    controls = slots + cards
 
     piece = Piece()
 
