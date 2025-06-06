@@ -1,7 +1,8 @@
 import flet as ft
 from core.piece import Piece
+from abc import ABC, abstractmethod
 
-class Board:
+class Puzzle(ABC):
     def __init__(self, page: ft.Page):
         self.page = page
         self.slots = []
@@ -33,10 +34,17 @@ class Board:
             ]
         )
 
+    @property
+    @abstractmethod
+    def grid_size(self) -> int:
+        """Retorna o tamanho do grid (NxN)"""
+        pass
+
     def _create_board(self):
         number = 1
-        for i in range(3):
-            for j in range(3):
+        size = self.grid_size
+        for i in range(size):
+            for j in range(size):
                 slot = ft.Container(
                     content=ft.Text(value=str(number), size=24, color=ft.Colors.BLACK),
                     width=70,
@@ -50,7 +58,8 @@ class Board:
                 number += 1
 
     def _create_pieces(self):
-        for i in range(9):
+        total_pieces = self.grid_size * self.grid_size
+        for i in range(total_pieces):
             piece = Piece(
                 self.page,
                 number=i+1,
