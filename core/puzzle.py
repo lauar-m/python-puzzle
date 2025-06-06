@@ -1,14 +1,21 @@
 import flet as ft
 from core.piece import Piece
 from abc import ABC, abstractmethod
+import math
 
 class Puzzle(ABC):
+    CELL_SIZE = 70
+    CELL_SPACING = 2
+    PIECES_PER_ROW = 8
+
     def __init__(self, page: ft.Page):
         self.page = page
         self.slots = []
         self.pieces: list[Piece] = []
         self.controls = []
         self.pieces_positions = {}
+
+        self.calculate_layout()
 
         self._create_board()
         self._create_pieces()
@@ -29,8 +36,16 @@ class Puzzle(ABC):
             self.slots +
             [piece.gesture_detector for piece in self.pieces] +
             [
-                ft.Container(content=self.check_button, top=400, left=400),
-                ft.Container(content=self.message, top=450, left=400)
+                ft.Container(
+                    content=self.check_button,
+                    top=self.board_top + (self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)) + 20,
+                    left=self.board_left
+                ),
+                ft.Container(
+                    content=self.message,
+                    top=self.board_top + (self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)) + 70,
+                    left=self.board_left
+                )
             ]
         )
 
@@ -40,6 +55,23 @@ class Puzzle(ABC):
         """Retorna o tamanho do grid (NxN)"""
         pass
 
+    def calculate_layout(self):
+        # Calcula dimensões do tabuleiro
+        board_width = self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)
+        board_height = self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)
+
+        # Centraliza tabuleiro
+        self.board_left = (self.page.width - board_width) / 2
+        self.board_top = (self.page.height - board_height) / 3
+
+        total_pieces = self.grid_size * self.grid_size
+        rows_needed = math.ceil(total_pieces / self.PIECES_PER_ROW)
+
+        self.pieces_area = {
+            "top": self.page.height - (rows_needed * (self.CELL_SIZE + self.CELL_SPACING)) - 50,
+            "left": (self.page.width - (min(total_pieces, self.PIECES_PER_ROW) * (self.CELL_SIZE + self.CELL_SPACING))) / 2
+        }
+
     def _create_board(self):
         number = 1
         size = self.grid_size
@@ -47,10 +79,10 @@ class Puzzle(ABC):
             for j in range(size):
                 slot = ft.Container(
                     content=ft.Text(value=str(number), size=24, color=ft.Colors.BLACK),
-                    width=70,
-                    height=70,
-                    left=j*72,
-                    top=i*72,
+                    width=self.CELL_SIZE,
+                    height=self.CELL_SIZE,
+                    left=self.board_left + (j * (self.CELL_SIZE + self.CELL_SPACING)),
+                    top=self.board_top + (i * (self.CELL_SIZE + self.CELL_SPACING)),
                     border=ft.border.all(1),
                     alignment=ft.alignment.center
                 )
@@ -59,12 +91,17 @@ class Puzzle(ABC):
 
     def _create_pieces(self):
         total_pieces = self.grid_size * self.grid_size
+        pieces_per_row = self.PIECES_PER_ROW
+
         for i in range(total_pieces):
+            row = i // pieces_per_row
+            col = i % pieces_per_row
+
             piece = Piece(
                 self.page,
                 number=i+1,
-                original_top=i*55,
-                original_left=400
+                original_top=self.pieces_area['top'] + (row * (self.CELL_SIZE + self.CELL_SPACING)),
+                original_left=self.pieces_area['left'] + (col * (self.CELL_SIZE + self.CELL_SPACING))
             )
             piece.setup_drag_handlers(self)
             self.pieces.append(piece)
