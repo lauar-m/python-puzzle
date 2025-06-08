@@ -128,6 +128,11 @@ class Puzzle(ABC):
                     abs(e.control.top - slot.top) < 20
                     and abs(e.control.left - slot.left) < 20
             ):
+                # Verifica se  o slot já está ocupado por outra peça
+                if slot in self.pieces_positions and self.pieces_positions[slot] != piece:
+                    # Slot ocupado, retornar a peça à posição original
+                    break
+
                 piece.place_at(slot.top, slot.left)
                 self.pieces_positions[slot] = piece
                 found_slot = True
@@ -135,6 +140,7 @@ class Puzzle(ABC):
 
         if not found_slot:
             piece.return_to_original_position()
+            # Limpa a posição anterior se existir
             for slot in self.slots:
                 if self.pieces_positions.get(slot) == piece:
                     del self.pieces_positions[slot]
