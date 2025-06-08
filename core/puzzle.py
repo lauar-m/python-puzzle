@@ -60,16 +60,27 @@ class Puzzle(ABC):
         board_width = self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)
         board_height = self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)
 
-        # Centraliza tabuleiro
-        self.board_left = (self.page.width - board_width) / 2
+        # Dimensões da área das peças
+        total_pieces = self.grid_size * self.grid_size
+        pieces_per_column = self.PIECES_PER_ROW  # Máximo de peças por coluna
+        columns_needed = math.ceil(total_pieces / pieces_per_column)
+        pieces_width = columns_needed * (self.CELL_SIZE + self.CELL_SPACING)
+
+        # Espaço entre tabuleiro e peças
+        space_between = 40
+
+        # Largura total do conjunto
+        total_width = board_width + space_between + pieces_width
+
+        # Centralizar o conjunto todo na tela
+        base_left = (self.page.width - total_width) / 2
+        self.board_left = base_left
         self.board_top = (self.page.height - board_height) / 3
 
-        total_pieces = self.grid_size * self.grid_size
-        rows_needed = math.ceil(total_pieces / self.PIECES_PER_ROW)
-
+        # Posicionar peças à direita do tabuleiro
         self.pieces_area = {
-            "top": self.page.height - (rows_needed * (self.CELL_SIZE + self.CELL_SPACING)) - 50,
-            "left": (self.page.width - (min(total_pieces, self.PIECES_PER_ROW) * (self.CELL_SIZE + self.CELL_SPACING))) / 2
+            "top": self.board_top,
+            "left": self.board_left + board_width + space_between
         }
 
     def _create_board(self):
