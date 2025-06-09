@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 import math
 from io import BytesIO
 from utils.image_fetcher import ImageFetcher
+import random
+
 
 class Puzzle(ABC):
     CELL_SIZE = 70
@@ -25,35 +27,10 @@ class Puzzle(ABC):
         self._create_board()
         self._create_pieces(image_pieces=image_pieces)
 
-        self.check_button = ft.ElevatedButton(
-            text="Verificar",
-            on_click=self.check_solution
-        )
-
-        self.message = ft.Text(
-            value="",
-            color=ft.Colors.GREEN,
-            size=20,
-            visible=False
-        )
-
         self.controls = (
             self.slots +
-            [piece.gesture_detector for piece in self.pieces] +
-            [
-                ft.Container(
-                    content=self.check_button,
-                    top=self.board_top + (self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)) + 20,
-                    left=self.board_left
-                ),
-                ft.Container(
-                    content=self.message,
-                    top=self.board_top + (self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)) + 70,
-                    left=self.board_left
-                )
-            ]
+            [piece.gesture_detector for piece in self.pieces]
         )
-
 
     @property
     @abstractmethod
@@ -163,7 +140,7 @@ class Puzzle(ABC):
                 if self.pieces_positions.get(slot) == piece:
                     del self.pieces_positions[slot]
 
-    def check_solution(self, e):
+    def check_solution(self, e) -> bool:
         all_correct = True
         for i, slot in enumerate(self.slots):
             piece = self.pieces_positions.get(slot)
@@ -171,9 +148,21 @@ class Puzzle(ABC):
                 all_correct = False
                 break
 
-        self.message.visible = True
-        if all_correct:
-            self.message.value = "Parabéns! Você completou o quebra cabeça!"
-        else:
-            self.message.value = "Continue tentando!"
-        self.page.update()
+        return all_correct
+
+    def shuffle_pieces(self):
+        pieces_per_row = self.PIECES_PER_ROW
+
+        random.shuffle(self.pieces)
+
+        for i, piece in enumerate(self.pieces):
+            row = i // pieces_per_row
+            col = i % pieces_per_row
+
+            new_top = self.pieces_area['top'] + (row * (self.CELL_SIZE + self.CELL_SPACING))
+            new_left = self.pieces_area['left'] + (col * (self.CELL_SIZE + self.CELL_SPACING))
+
+            piece.original_top = new_top
+            piece.original_left = new_left
+
+            piece.return_to_original_position()
