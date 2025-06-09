@@ -12,12 +12,12 @@ def main(page: ft.Page):
     def page_resize(e):
         # Recriar o puzzle quando a janela for redimensionada
         page.controls.clear()
-        puzzle = MediumPuzzle(page)
+        puzzle = EasyPuzzle(page)
         page.add(ft.Stack(controls=puzzle.controls, width=page.width, height=page.height))
         page.update()
 
     page.on_resize = page_resize
-    puzzle = HardPuzzle(page)
+    puzzle = EasyPuzzle(page)
     page.add(ft.Stack(controls=puzzle.controls, width=page.width, height=page.height))
 
 ft.app(target=main, view=ft.WEB_BROWSER, port=8000)

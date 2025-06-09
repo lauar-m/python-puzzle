@@ -2,6 +2,8 @@ import flet as ft
 from core.piece import Piece
 from abc import ABC, abstractmethod
 import math
+from io import BytesIO
+from utils.image_fetcher import ImageFetcher
 
 class Puzzle(ABC):
     CELL_SIZE = 70
@@ -15,10 +17,13 @@ class Puzzle(ABC):
         self.controls = []
         self.pieces_positions = {}
 
+        image_url = ImageFetcher.fetch_random_image()
+        image_pieces = ImageFetcher.split_image_from_url(image_url, self.grid_size)
+
         self.calculate_layout()
 
         self._create_board()
-        self._create_pieces()
+        self._create_pieces(image_pieces=image_pieces)
 
         self.check_button = ft.ElevatedButton(
             text="Verificar",
@@ -48,6 +53,7 @@ class Puzzle(ABC):
                 )
             ]
         )
+
 
     @property
     @abstractmethod
@@ -100,7 +106,7 @@ class Puzzle(ABC):
                 self.slots.append(slot)
                 number += 1
 
-    def _create_pieces(self):
+    def _create_pieces(self, image_pieces: list[BytesIO]):
         total_pieces = self.grid_size * self.grid_size
         pieces_per_row = self.PIECES_PER_ROW
 
@@ -112,7 +118,8 @@ class Puzzle(ABC):
                 self.page,
                 number=i+1,
                 original_top=self.pieces_area['top'] + (row * (self.CELL_SIZE + self.CELL_SPACING)),
-                original_left=self.pieces_area['left'] + (col * (self.CELL_SIZE + self.CELL_SPACING))
+                original_left=self.pieces_area['left'] + (col * (self.CELL_SIZE + self.CELL_SPACING)),
+                image_bytes=image_pieces[i]
             )
             piece.setup_drag_handlers(self)
             self.pieces.append(piece)

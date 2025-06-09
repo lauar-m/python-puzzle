@@ -1,7 +1,10 @@
 import flet as ft
+import base64
+from io import BytesIO
+
 
 class Piece:
-    def __init__(self, page: ft.Page, number: int, original_top: int, original_left: int):
+    def __init__(self, page: ft.Page, number: int, original_top: int, original_left: int, image_bytes: BytesIO):
         self.page = page
         self.number = number
         self.start_top = 0
@@ -9,12 +12,31 @@ class Piece:
         self.original_top = original_top
         self.original_left = original_left
 
+        base64_str = base64.b64encode(image_bytes.read()).decode("utf-8")
+        image_src = f"data:image/png;base64,{base64_str}"
+
         self.container = ft.Container(
-            content=ft.Text(value=str(number), size=24, color=ft.Colors.WHITE),
-            bgcolor=ft.Colors.GREEN,
+            content=ft.Stack([
+                ft.Image(
+                    src=image_src,
+                    width=70,
+                    height=70,
+                    fit=ft.ImageFit.COVER
+                ),
+                ft.Container(
+                    content=ft.Text(
+                        value=str(number),
+                        size=20,
+                        color=ft.Colors.WHITE,
+                        weight=ft.FontWeight.BOLD
+                    ),
+                    alignment=ft.alignment.center,
+                    width=70,
+                    height=70,
+                )
+            ]),
             width=70,
             height=70,
-            alignment=ft.alignment.center
         )
 
         self.gesture_detector = ft.GestureDetector(

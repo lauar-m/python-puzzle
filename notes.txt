@@ -2,20 +2,17 @@ puzzle_game/
 ├── app.py                    ← Ponto de entrada principal do app (roda o Flet)
 ├── requirements.txt          ← Dependências do projeto (ex: flet, requests, etc)
 │
-├── core/                     ← Lógica central do jogo (orientado a objetos)
+├── models/                     ← Lógica central do jogo (orientado a objetos)
 │   ├── __init__.py
 │   ├── puzzle.py             ← Classe abstrata Puzzle e herdeiras (Easy, Medium, Hard)
 │   ├── piece.py              ← Classe Piece
 │   └── game_manager.py       ← Controlador do jogo (lógica de embaralhar, mover peças, etc)
 │
-├── ui/                       ← Interface gráfica com Flet
+├── views/                       ← Interface gráfica com Flet
 │   ├── __init__.py
 │   ├── main_screen.py        ← Tela principal do quebra-cabeça
 │   ├── puzzle_grid.py        ← Componente da grade (grid) com as peças
 │   └── components.py         ← Componentes reutilizáveis (botões, cards, etc)
-│
-├── assets/                   ← Imagens, fontes, estilos etc
-│   └── logo.png
 │
 ├── data/                     ← Dados persistentes (futuramente login, pontuação, ranking)
 │   ├── __init__.py
