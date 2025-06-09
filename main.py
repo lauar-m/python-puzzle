@@ -1,7 +1,7 @@
 import flet as ft
-from views.main_window import tela_home
+from views.main_window import home_window
 from views.played_games_window import tela_jogos
-from utils.components import criar_botao
+from utils.components import create_button
 
 
 def main(page: ft.Page):
@@ -14,7 +14,7 @@ def main(page: ft.Page):
     }
     page.theme = ft.Theme(font_family="Poppins")
 
-    conteudo = ft.Column(
+    content = ft.Column(
         scroll=ft.ScrollMode.AUTO,
         expand=True,
         alignment=ft.MainAxisAlignment.START,
@@ -22,12 +22,12 @@ def main(page: ft.Page):
         spacing=25
     )
 
-    def atualizar_tela(tela):
-        conteudo.controls.clear()
+    def reload_window(tela):
+        content.controls.clear()
         if tela == "home":
-            tela_home(conteudo)
+            home_window(content)
         elif tela == "jogos":
-            tela_jogos(conteudo)
+            tela_jogos(content)
         page.update()
 
     # Sidebar com botões centralizados
@@ -58,8 +58,8 @@ def main(page: ft.Page):
                         spacing=10,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         controls=[
-                            criar_botao("Home", ft.Icons.HOME, lambda e: atualizar_tela("home")),
-                            criar_botao("Jogos", ft.Icons.GAMES, lambda e: atualizar_tela("jogos")),
+                            create_button("Home", ft.Icons.HOME, lambda e: reload_window("home")),
+                            create_button("Jogos", ft.Icons.GAMES, lambda e: reload_window("jogos")),
                         ]
                     )
                 ),
@@ -79,7 +79,7 @@ def main(page: ft.Page):
                 ),
                 ft.Container(
                     width=180,
-                    content=criar_botao("Sair", ft.Icons.EXIT_TO_APP, lambda e: page.window_close(), cor="#E76F51")
+                    content=create_button("Sair", ft.Icons.EXIT_TO_APP, lambda e: page.logout(), cor="#E76F51")
                 )
             ]
         )
@@ -94,13 +94,13 @@ def main(page: ft.Page):
             ft.Container(
                 expand=True,
                 padding=40,
-                content=conteudo,
+                content=content,
                 bgcolor="#DAD7CD"
             )
         ]
     )
 
     page.add(layout)
-    atualizar_tela("home")
+    reload_window("home")
 
 ft.app(target=main, view=ft.WEB_BROWSER, port=8550, host="localhost")

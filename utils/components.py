@@ -8,7 +8,7 @@ COR_SECUNDARIA = "#588157"
 COR_TEXTO = "#344E41"
 COR_DESTAQUE = "#E76F51"
 
-def criar_botao(texto, icone=None, acao=None, largura=180, cor=COR_PRIMARIA):
+def create_button(texto, icone=None, acao=None, largura=180, cor=COR_PRIMARIA):
     return ft.Container(
         width=largura,
         height=45,

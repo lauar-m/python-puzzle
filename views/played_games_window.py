@@ -1,7 +1,7 @@
 import flet as ft
 from utils.components import criar_card, COR_SECUNDARIA
 
-def tela_jogos(conteudo: ft.Column):
+def tela_jogos(content: ft.Column):
     historico = ft.Column([
         ft.ListTile(
             leading=ft.Icon(ft.Icons.EXTENSION, color=COR_SECUNDARIA),
@@ -14,4 +14,4 @@ def tela_jogos(conteudo: ft.Column):
             subtitle=ft.Text("Tempo: 03:18 - 10/06/2023"),
         )
     ])
-    conteudo.controls.append(criar_card("📊 Seu Histórico", historico))
+    content.controls.append(criar_card("📊 Seu Histórico", historico))

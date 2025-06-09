@@ -1,7 +1,7 @@
 import flet as ft
-from utils.components import criar_botao, criar_card, COR_TEXTO, COR_SECUNDARIA
+from utils.components import create_button, criar_card, COR_TEXTO, COR_SECUNDARIA
 
-def tela_home(conteudo: ft.Column):
+def home_window(content: ft.Column):
     ranking = ft.Column(
         spacing=10,
         width=400
@@ -20,13 +20,13 @@ def tela_home(conteudo: ft.Column):
             )
         )
 
-    conteudo.controls.extend([
+    content.controls.extend([
         ft.Text("🏆 RANKING", size=24, weight=ft.FontWeight.BOLD, color=COR_TEXTO),
         criar_card("Melhores Tempos", ft.Column([
             ranking,
             ft.Divider(height=20),
             ft.Row(
-                controls=[criar_botao("JOGAR", ft.Icons.PLAY_ARROW, cor=COR_SECUNDARIA, largura=200)],
+                controls=[create_button("JOGAR", ft.Icons.PLAY_ARROW, cor=COR_SECUNDARIA, largura=200)],
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ]))
