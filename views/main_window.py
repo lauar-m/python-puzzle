@@ -1,7 +1,7 @@
 import flet as ft
-from utils.components import create_button, criar_card, COR_TEXTO, COR_SECUNDARIA
+from utils.components import create_button, create_card, TEXT_COLOR, SECONDARY_COLOR
 
-def home_window(content: ft.Column):
+def MainWindow(content: ft.Column):
     ranking = ft.Column(
         spacing=10,
         width=400
@@ -14,19 +14,19 @@ def home_window(content: ft.Column):
             ft.ListTile(
                 leading=ft.Text(f"{i+1}º", size=16, weight=ft.FontWeight.BOLD),
                 title=ft.Text(nome, weight=ft.FontWeight.W_500),
-                trailing=ft.Text(f"{tempo}", color=COR_TEXTO),
-                subtitle=ft.Text(f"Dificuldade: {dificuldade}", size=12, color=COR_TEXTO,
+                trailing=ft.Text(f"{tempo}", color=TEXT_COLOR),
+                subtitle=ft.Text(f"Dificuldade: {dificuldade}", size=12, color=TEXT_COLOR,
                                  weight=ft.FontWeight.W_400)
             )
         )
 
     content.controls.extend([
-        ft.Text("🏆 RANKING", size=24, weight=ft.FontWeight.BOLD, color=COR_TEXTO),
-        criar_card("Melhores Tempos", ft.Column([
+        ft.Text("🏆 RANKING", size=24, weight=ft.FontWeight.BOLD, color=TEXT_COLOR),
+        create_card("Melhores Tempos", ft.Column([
             ranking,
             ft.Divider(height=20),
             ft.Row(
-                controls=[create_button("JOGAR", ft.Icons.PLAY_ARROW, cor=COR_SECUNDARIA, largura=200)],
+                controls=[create_button("JOGAR", ft.Icons.PLAY_ARROW, color=SECONDARY_COLOR, largura=200)],
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ]))
