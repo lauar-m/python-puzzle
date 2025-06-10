@@ -1,10 +1,12 @@
 import flet as ft
-from core.easy_puzzle import EasyPuzzle
+from models.easy_puzzle import EasyPuzzle
 from core.medium_puzzle import MediumPuzzle
-from core.hard_puzzle import HardPuzzle
+from models.hard_puzzle import HardPuzzle
+from dotenv import load_dotenv
 
 
 def main(page: ft.Page):
+    load_dotenv()
     page.window_width = 800
     page.window_height = 600
     page.window_maximized = True
