@@ -2,7 +2,7 @@ import flet as ft
 from utils.components import create_button, create_card, TEXT_COLOR, SECONDARY_COLOR
 
 
-def MainWindow(content: ft.Column):
+def MainWindow(content: ft.Column, reload):
     ranking = ft.Column(spacing=10, width=400)
 
     ranking_data = [ # pegar do banco
@@ -42,6 +42,8 @@ def MainWindow(content: ft.Column):
                                     ft.Icons.PLAY_ARROW,
                                     color=SECONDARY_COLOR,
                                     largura=200,
+                                    action=lambda e: reload("game_window", difficulty="Fácil"
+                                    ),
                                 )
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,

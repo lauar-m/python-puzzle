@@ -2,6 +2,7 @@ import flet as ft
 from views.main_window import MainWindow
 from views.played_games_window import PlayedGamesWindow
 from views.login_window import LoginWindow
+from views.game_window import GameWindow
 from utils.components import (
     create_button,
     TEXT_COLOR,
@@ -40,11 +41,13 @@ def main(page: ft.Page):
         current_window["name"] = window_name
 
         if window_name == "home":
-            MainWindow(content)
+            MainWindow(content, reload_window)
         elif window_name == "played_games":
             PlayedGamesWindow(content)
         elif window_name == "login":
             LoginWindow(content, on_success=lambda name: reload_window("home", name))
+        elif window_name == "game":
+            GameWindow(content, difficulty="Fácil")
 
         page.controls.clear()
         page.add(build_layout())
