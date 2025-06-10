@@ -2,6 +2,7 @@ import flet as ft
 from views.main_window import MainWindow
 from views.played_games_window import PlayedGamesWindow
 from views.login_window import LoginWindow
+from views.game_window import GameWindow
 from utils.components import (
     create_button,
     TEXT_COLOR,
@@ -22,7 +23,7 @@ def main(page: ft.Page):
     page.theme = ft.Theme(font_family="Poppins")
 
     current_window = {"name": "login"}
-    usuario_logado = {"nome": "Visitante"}
+    logged_user = {"name": "Visitante"}
 
     content = ft.Column(
         scroll=ft.ScrollMode.AUTO,
@@ -30,21 +31,24 @@ def main(page: ft.Page):
         alignment=ft.MainAxisAlignment.START,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=25,
+        spacing=25,
     )
 
-    def reload_window(window_name: str, nome_usuario=None):
+    def reload_window(window_name: str, username=None):
         content.controls.clear()
-        if nome_usuario:
-            usuario_logado["nome"] = nome_usuario
+        if username:
+            logged_user["name"] = username
 
         current_window["name"] = window_name
 
         if window_name == "home":
-            MainWindow(content)
-        elif window_name == "jogos":
+            MainWindow(content, reload_window)
+        elif window_name == "played_games":
             PlayedGamesWindow(content)
         elif window_name == "login":
-            LoginWindow(content, on_success=lambda nome: reload_window("home", nome))
+            LoginWindow(content, on_success=lambda name: reload_window("home", name))
+        elif window_name == "game":
+            GameWindow(content, difficulty="Fácil")
 
         page.controls.clear()
         page.add(build_layout())
@@ -60,68 +64,83 @@ def main(page: ft.Page):
                 colors=[THIRD_COLOR, TEXT_COLOR],
             ),
             content=ft.Column(
-                spacing=25,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                # Distribui topo e fundo
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                expand=True,
                 controls=[
-                    ft.Row(
-                        alignment=ft.MainAxisAlignment.CENTER,
+                    ft.Column(
+                        spacing=25,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         controls=[
-                            ft.Icon(ft.Icons.EXTENSION, size=40, color="white"),
-                            ft.Text(
-                                "Quebra-Cabeça",
-                                size=20,
-                                color="white",
-                                weight=ft.FontWeight.BOLD,
+                            ft.Row(
+                                alignment=ft.MainAxisAlignment.CENTER,
+                                controls=[
+                                    ft.Icon(ft.Icons.EXTENSION, size=40, color="white"),
+                                    ft.Text(
+                                        "Quebra-Cabeça",
+                                        size=20,
+                                        color="white",
+                                        weight=ft.FontWeight.BOLD,
+                                    ),
+                                ],
                             ),
+                            ft.Divider(color=ft.Colors.WHITE24),
+                            ft.Container(
+                                width=180,
+                                content=ft.Column(
+                                    spacing=10,
+                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                    controls=[
+                                        create_button(
+                                            "Home",
+                                            ft.Icons.HOME,
+                                            lambda e: reload_window("home"),
+                                        ),
+                                        create_button(
+                                            "Jogos",
+                                            ft.Icons.GAMES,
+                                            lambda e: reload_window("played_games"),
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            ft.Divider(color=ft.Colors.WHITE24),
                         ],
                     ),
-                    ft.Divider(color=ft.Colors.WHITE24),
-                    ft.Container(
-                        width=180,
-                        content=ft.Column(
-                            spacing=10,
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                            controls=[
-                                create_button(
-                                    "Home",
-                                    ft.Icons.HOME,
-                                    lambda e: reload_window("home"),
+                    ft.Column(
+                        spacing=20,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            ft.Container(
+                                padding=15,
+                                border_radius=8,
+                                bgcolor=ft.Colors.WHITE10,
+                                content=ft.Column(
+                                    spacing=8,
+                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                    controls=[
+                                        ft.Text("Jogador: ", color="white", size=12),
+                                        ft.Text(
+                                            logged_user["name"],
+                                            color="white",
+                                            size=16,
+                                            weight=ft.FontWeight.BOLD,
+                                        ),
+                                    ],
                                 ),
-                                create_button(
-                                    "Jogos",
-                                    ft.Icons.GAMES,
-                                    lambda e: reload_window("jogos"),
+                            ),
+                            ft.Container(
+                                width=180,
+                                margin=ft.margin.only(bottom=20),
+                                content=create_button(
+                                    "Sair",
+                                    ft.Icons.EXIT_TO_APP,
+                                    lambda e: reload_window("login"),
+                                    color=QUIT_COLOR,
                                 ),
-                            ],
-                        ),
-                    ),
-                    ft.Divider(color=ft.Colors.WHITE24),
-                    ft.Container(
-                        padding=15,
-                        border_radius=8,
-                        bgcolor=ft.Colors.WHITE10,
-                        content=ft.Column(
-                            spacing=8,
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                            controls=[
-                                ft.Text("Jogador: ", color="white", size=12),
-                                ft.Text(
-                                    usuario_logado["nome"],
-                                    color="white",
-                                    size=16,
-                                    weight=ft.FontWeight.BOLD,
-                                ),
-                            ],
-                        ),
-                    ),
-                    ft.Container(
-                        width=180,
-                        content=create_button(
-                            "Sair",
-                            ft.Icons.EXIT_TO_APP,
-                            lambda e: reload_window("login"),
-                            color=QUIT_COLOR,
-                        ),
+                            ),
+                        ],
                     ),
                 ],
             ),
