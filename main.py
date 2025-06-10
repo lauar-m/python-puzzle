@@ -22,7 +22,7 @@ def main(page: ft.Page):
     page.theme = ft.Theme(font_family="Poppins")
 
     current_window = {"name": "login"}
-    usuario_logado = {"nome": "Visitante"}
+    logged_user = {"name": "Visitante"}
 
     content = ft.Column(
         scroll=ft.ScrollMode.AUTO,
@@ -32,19 +32,19 @@ def main(page: ft.Page):
         spacing=25,
     )
 
-    def reload_window(window_name: str, nome_usuario=None):
+    def reload_window(window_name: str, username=None):
         content.controls.clear()
-        if nome_usuario:
-            usuario_logado["nome"] = nome_usuario
+        if username:
+            logged_user["name"] = username
 
         current_window["name"] = window_name
 
         if window_name == "home":
             MainWindow(content)
-        elif window_name == "jogos":
+        elif window_name == "played_games":
             PlayedGamesWindow(content)
         elif window_name == "login":
-            LoginWindow(content, on_success=lambda nome: reload_window("home", nome))
+            LoginWindow(content, on_success=lambda name: reload_window("home", name))
 
         page.controls.clear()
         page.add(build_layout())
@@ -65,7 +65,6 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 expand=True,
                 controls=[
-                    # TOPO da sidebar
                     ft.Column(
                         spacing=25,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -97,7 +96,7 @@ def main(page: ft.Page):
                                         create_button(
                                             "Jogos",
                                             ft.Icons.GAMES,
-                                            lambda e: reload_window("jogos"),
+                                            lambda e: reload_window("played_games"),
                                         ),
                                     ],
                                 ),
@@ -119,7 +118,7 @@ def main(page: ft.Page):
                                     controls=[
                                         ft.Text("Jogador: ", color="white", size=12),
                                         ft.Text(
-                                            usuario_logado["nome"],
+                                            logged_user["name"],
                                             color="white",
                                             size=16,
                                             weight=ft.FontWeight.BOLD,

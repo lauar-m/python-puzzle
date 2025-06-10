@@ -5,20 +5,20 @@ from utils.components import create_button, create_card, TEXT_COLOR, SECONDARY_C
 def MainWindow(content: ft.Column):
     ranking = ft.Column(spacing=10, width=400)
 
-    dados_ranking = [
-        ("MALU", "03:14", "DIF"),
-        ("BIANCA", "03:52", "DIF"),
-        ("TEO", "04:12", "MED"),
+    ranking_data = [ # pegar do banco
+        ("MALU", "03:14", "MED"),
+        ("MALU", "03:52", "MED"),
+        ("MALU", "04:12", "DIF"),
     ]
 
-    for i, (nome, tempo, dificuldade) in enumerate(dados_ranking):
+    for i, (name, time, difficulty) in enumerate(ranking_data):
         ranking.controls.append(
             ft.ListTile(
                 leading=ft.Text(f"{i+1}º", size=16, weight=ft.FontWeight.BOLD),
-                title=ft.Text(nome, weight=ft.FontWeight.W_500),
-                trailing=ft.Text(f"{tempo}", color=TEXT_COLOR),
+                title=ft.Text(name, weight=ft.FontWeight.W_500),
+                trailing=ft.Text(f"{time}", color=TEXT_COLOR),
                 subtitle=ft.Text(
-                    f"Dificuldade: {dificuldade}",
+                    f"Dificuldade: {difficulty}",
                     size=12,
                     color=TEXT_COLOR,
                     weight=ft.FontWeight.W_400,
