@@ -19,7 +19,7 @@ def create_button(text, icon=None, action=None, largura=180, color=PRIMARY_COLOR
             content=ft.Row(
                 [ft.Icon(icon), ft.Text(text)] if icon else [ft.Text(text)],
                 alignment=ft.MainAxisAlignment.CENTER,
-                spacing=8
+                spacing=8,
             ),
             style=ft.ButtonStyle(
                 bgcolor=color,
@@ -28,9 +28,10 @@ def create_button(text, icon=None, action=None, largura=180, color=PRIMARY_COLOR
                 padding=15,
                 elevation=1,
             ),
-            on_click=action
-        )
+            on_click=action,
+        ),
     )
+
 
 def create_card(titulo, corpo):
     return ft.Container(
@@ -44,7 +45,7 @@ def create_card(titulo, corpo):
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 ft.Text(titulo, size=20, weight=ft.FontWeight.BOLD, color=TEXT_COLOR),
-                corpo
-            ]
-        )
+                corpo,
+            ],
+        ),
     )

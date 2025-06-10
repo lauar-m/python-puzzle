@@ -18,10 +18,7 @@ else:
     print(f"Welcome {user.username}!")
 
 history, error = PuzzleHistoryService.add_puzzle_history(
-    user_id=1,
-    solving_time=120,
-    difficulty=Difficulty.medium,
-    image=""
+    user_id=1, solving_time=120, difficulty=Difficulty.medium, image=""
 )
 if error:
     print(f"Error adding history: {error}")

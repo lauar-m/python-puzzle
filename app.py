@@ -16,7 +16,9 @@ def main(page: ft.Page):
         # Recriar o puzzle quando a janela for redimensionada
         page.controls.clear()
         puzzle = EasyPuzzle(page)
-        page.add(ft.Stack(controls=puzzle.controls, width=page.width, height=page.height))
+        page.add(
+            ft.Stack(controls=puzzle.controls, width=page.width, height=page.height)
+        )
         puzzle.shuffle_pieces()
         page.update()
 

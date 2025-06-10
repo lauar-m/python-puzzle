@@ -8,7 +8,9 @@ from sqlalchemy.exc import SQLAlchemyError
 
 class UserService:
     @classmethod
-    def create_user(cls, username: str, password: str) -> tuple[Optional[User], Optional[str]]:
+    def create_user(
+        cls, username: str, password: str
+    ) -> tuple[Optional[User], Optional[str]]:
         """
         Creates a new user with hashed password
         Returns tuple: (User object, error message)
@@ -46,10 +48,12 @@ class UserService:
         """Retrieves a user by username with their puzzle histories"""
         session = DatabaseManager.get_session()
         try:
-            return session.query(User)\
-                .options(joinedload(User.puzzle_histories))\
-                .filter_by(username=username)\
+            return (
+                session.query(User)
+                .options(joinedload(User.puzzle_histories))
+                .filter_by(username=username)
                 .first()
+            )
         except SQLAlchemyError as e:
             print(f"database error fetching user: {e}")
             return None
@@ -76,7 +80,9 @@ class UserService:
             session.close()
 
     @classmethod
-    def update_password(cls, user_id: int, new_password: str) -> tuple[bool, Optional[str]]:
+    def update_password(
+        cls, user_id: int, new_password: str
+    ) -> tuple[bool, Optional[str]]:
         """Updates user password with new hash"""
         session = DatabaseManager.get_session()
         try:
@@ -103,11 +109,7 @@ class UserService:
 class PuzzleHistoryService:
     @classmethod
     def add_puzzle_history(
-        cls, 
-        user_id: int, 
-        solving_time: int,
-        image: str,
-        difficulty: Difficulty
+        cls, user_id: int, solving_time: int, image: str, difficulty: Difficulty
     ) -> tuple[Optional[PuzzleHistory], Optional[str]]:
         """Adds a new puzzle history record"""
         session = DatabaseManager.get_session()
@@ -119,7 +121,7 @@ class PuzzleHistoryService:
                 user_id=user_id,
                 solving_time=solving_time,
                 difficulty=difficulty,
-                image=image
+                image=image,
             )
             session.add(history)
             session.commit()
@@ -133,14 +135,18 @@ class PuzzleHistoryService:
             session.close()
 
     @classmethod
-    def get_puzzle_histories_for_user(cls, user_id: int) -> tuple[Optional[list[PuzzleHistory]], Optional[str]]:
+    def get_puzzle_histories_for_user(
+        cls, user_id: int
+    ) -> tuple[Optional[list[PuzzleHistory]], Optional[str]]:
         """Retrieves all puzzle histories for a user"""
         session = DatabaseManager.get_session()
         try:
-            histories = session.query(PuzzleHistory)\
-                .filter_by(user_id=user_id)\
-                .order_by(PuzzleHistory.played_date.desc())\
+            histories = (
+                session.query(PuzzleHistory)
+                .filter_by(user_id=user_id)
+                .order_by(PuzzleHistory.played_date.desc())
                 .all()
+            )
             return histories, None
         except SQLAlchemyError as e:
             print(f"database error fetching histories: {e}")
@@ -169,7 +175,9 @@ class PuzzleHistoryService:
 
 class AuthService:
     @classmethod
-    def authenticate_user(cls, username: str, password: str) -> tuple[Optional[User], Optional[str]]:
+    def authenticate_user(
+        cls, username: str, password: str
+    ) -> tuple[Optional[User], Optional[str]]:
         """
         Authenticates a user
         Returns tuple: (User object, error message)
@@ -180,7 +188,9 @@ class AuthService:
 
             user = UserService.get_user_by_username(username)
             if not user:
-                new_user = UserService.create_user(username=username, password=hash_password(password))
+                new_user = UserService.create_user(
+                    username=username, password=hash_password(password)
+                )
                 return new_user, None
 
             if not check_password(password, user.password):

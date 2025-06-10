@@ -19,7 +19,9 @@ class User(Base):
     username = Column(String(25), unique=True, nullable=False)
     password = Column(String(100), nullable=False)
 
-    puzzle_histories = relationship("PuzzleHistory", back_populates="user", cascade="all, delete-orphan")
+    puzzle_histories = relationship(
+        "PuzzleHistory", back_populates="user", cascade="all, delete-orphan"
+    )
 
 
 class PuzzleHistory(Base):
@@ -30,6 +32,6 @@ class PuzzleHistory(Base):
     solving_time = Column(Integer, nullable=False)
     played_date = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
     difficulty = Column(Enum(Difficulty), nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     user = relationship("User", back_populates="puzzle_histories")

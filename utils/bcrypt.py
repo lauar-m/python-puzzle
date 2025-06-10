@@ -9,7 +9,7 @@ def hash_password(password: str) -> Optional[str]:
     try:
         if not password or len(password) < 8:
             raise ValueError("password must be at least 8 characters long")
-        
+
         salt = bcrypt.gensalt(rounds=HASH_ROUNDS)
         hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
         return hashed.decode("utf-8")
