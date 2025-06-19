@@ -1,5 +1,5 @@
 import flet as ft
-from core.piece import Piece
+from models.piece import Piece
 from abc import ABC, abstractmethod
 import math
 from io import BytesIO

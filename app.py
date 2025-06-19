@@ -1,6 +1,6 @@
 import flet as ft
 from models.easy_puzzle import EasyPuzzle
-from core.medium_puzzle import MediumPuzzle
+from models.medium_puzzle import MediumPuzzle
 from models.hard_puzzle import HardPuzzle
 from dotenv import load_dotenv
 

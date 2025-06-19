@@ -19,6 +19,8 @@ class UserService:
         try:
             if not username or len(username) < 3:
                 return None, "username must be at least 3 characters long"
+            if not password or len(password) < 8:
+                return None, "password must be at least 8 characters long"
 
             existing_user = cls.get_user_by_username(username)
             if existing_user:
@@ -188,9 +190,11 @@ class AuthService:
 
             user = UserService.get_user_by_username(username)
             if not user:
-                new_user = UserService.create_user(
+                new_user, error = UserService.create_user(
                     username=username, password=hash_password(password)
                 )
+                if error:
+                    return None, error
                 return new_user, None
 
             if not check_password(password, user.password):

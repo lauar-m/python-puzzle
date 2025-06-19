@@ -1,4 +1,4 @@
-from core.puzzle import Puzzle
+from models.puzzle import Puzzle
 
 
 class EasyPuzzle(Puzzle):
