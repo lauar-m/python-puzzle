@@ -2,6 +2,7 @@ import flet as ft
 from utils.components import create_button, create_card, TEXT_COLOR, SECONDARY_COLOR
 
 
+
 def MainWindow(content: ft.Column, reload):
     ranking = ft.Column(spacing=10, width=400)
 

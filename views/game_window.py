@@ -1,7 +1,8 @@
 import flet as ft
-from core.easy_puzzle import EasyPuzzle
-from core.medium_puzzle import MediumPuzzle
-from core.hard_puzzle import HardPuzzle
+from models.easy_puzzle import EasyPuzzle
+from models.medium_puzzle import MediumPuzzle
+from models.hard_puzzle import HardPuzzle
+
 
 def GameWindow(content: ft.Column, difficulty: str):
     content.controls.clear()

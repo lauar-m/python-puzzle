@@ -1,5 +1,5 @@
 import flet as ft
-from core.piece import Piece
+from models.piece import Piece
 from abc import ABC, abstractmethod
 import math
 from io import BytesIO
@@ -27,10 +27,7 @@ class Puzzle(ABC):
         self._create_board()
         self._create_pieces(image_pieces=image_pieces)
 
-        self.controls = (
-            self.slots +
-            [piece.gesture_detector for piece in self.pieces]
-        )
+        self.controls = self.slots + [piece.gesture_detector for piece in self.pieces]
 
     @property
     @abstractmethod
@@ -63,7 +60,7 @@ class Puzzle(ABC):
         # Posicionar peças à direita do tabuleiro
         self.pieces_area = {
             "top": self.board_top,
-            "left": self.board_left + board_width + space_between
+            "left": self.board_left + board_width + space_between,
         }
 
     def _create_board(self):
@@ -78,7 +75,7 @@ class Puzzle(ABC):
                     left=self.board_left + (j * (self.CELL_SIZE + self.CELL_SPACING)),
                     top=self.board_top + (i * (self.CELL_SIZE + self.CELL_SPACING)),
                     border=ft.border.all(1),
-                    alignment=ft.alignment.center
+                    alignment=ft.alignment.center,
                 )
                 self.slots.append(slot)
                 number += 1
@@ -93,10 +90,12 @@ class Puzzle(ABC):
 
             piece = Piece(
                 self.page,
-                number=i+1,
-                original_top=self.pieces_area['top'] + (row * (self.CELL_SIZE + self.CELL_SPACING)),
-                original_left=self.pieces_area['left'] + (col * (self.CELL_SIZE + self.CELL_SPACING)),
-                image_bytes=image_pieces[i]
+                number=i + 1,
+                original_top=self.pieces_area["top"]
+                + (row * (self.CELL_SIZE + self.CELL_SPACING)),
+                original_left=self.pieces_area["left"]
+                + (col * (self.CELL_SIZE + self.CELL_SPACING)),
+                image_bytes=image_pieces[i],
             )
             piece.setup_drag_handlers(self)
             self.pieces.append(piece)
@@ -120,11 +119,14 @@ class Puzzle(ABC):
         found_slot = False
         for slot in self.slots:
             if (
-                    abs(e.control.top - slot.top) < 20
-                    and abs(e.control.left - slot.left) < 20
+                abs(e.control.top - slot.top) < 20
+                and abs(e.control.left - slot.left) < 20
             ):
                 # Verifica se  o slot já está ocupado por outra peça
-                if slot in self.pieces_positions and self.pieces_positions[slot] != piece:
+                if (
+                    slot in self.pieces_positions
+                    and self.pieces_positions[slot] != piece
+                ):
                     # Slot ocupado, retornar a peça à posição original
                     break
 
@@ -159,8 +161,12 @@ class Puzzle(ABC):
             row = i // pieces_per_row
             col = i % pieces_per_row
 
-            new_top = self.pieces_area['top'] + (row * (self.CELL_SIZE + self.CELL_SPACING))
-            new_left = self.pieces_area['left'] + (col * (self.CELL_SIZE + self.CELL_SPACING))
+            new_top = self.pieces_area["top"] + (
+                row * (self.CELL_SIZE + self.CELL_SPACING)
+            )
+            new_left = self.pieces_area["left"] + (
+                col * (self.CELL_SIZE + self.CELL_SPACING)
+            )
 
             piece.original_top = new_top
             piece.original_left = new_left

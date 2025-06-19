@@ -1,4 +1,5 @@
-from core.puzzle import Puzzle
+from models.puzzle import Puzzle
+
 
 class MediumPuzzle(Puzzle):
     @property

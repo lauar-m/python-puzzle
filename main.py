@@ -10,6 +10,7 @@ from utils.components import (
     QUIT_COLOR,
     BACKGROUND_COLOR,
 )
+from data.schemas import User
 
 
 def main(page: ft.Page):
@@ -33,10 +34,10 @@ def main(page: ft.Page):
         spacing=25,
     )
 
-    def reload_window(window_name: str, username=None):
+    def reload_window(window_name: str, user: User = None):
         content.controls.clear()
-        if username:
-            logged_user["name"] = username
+        if user:
+            logged_user["name"] = user.username
 
         current_window["name"] = window_name
 
@@ -45,7 +46,7 @@ def main(page: ft.Page):
         elif window_name == "played_games":
             PlayedGamesWindow(content)
         elif window_name == "login":
-            LoginWindow(content, on_success=lambda name: reload_window("home", name))
+            LoginWindow(content, on_success=lambda user: reload_window("home", user))
         elif window_name == "game":
             GameWindow(content, difficulty="Fácil")
 

@@ -10,15 +10,15 @@ class ImageFetcher:
 
     @classmethod
     def fetch_random_image(cls, query=None):
-        headers = {
-            "Authorization": f"Client-ID {cls.ACCESS_KEY}"
-        }
+        headers = {"Authorization": f"Client-ID {cls.ACCESS_KEY}"}
         params = {
             "query": query or "nature",
         }
 
         try:
-            response = requests.get(cls.UNSPLASH_API_URL, headers=headers, params=params)
+            response = requests.get(
+                cls.UNSPLASH_API_URL, headers=headers, params=params
+            )
             response.raise_for_status()
             data = response.json()
 
