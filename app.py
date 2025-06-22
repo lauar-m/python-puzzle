@@ -17,14 +17,14 @@ def main(page: ft.Page):
         page.controls.clear()
         puzzle = EasyPuzzle(page)
         page.add(
-            ft.Stack(controls=puzzle.controls, width=page.width, height=page.height)
+            ft.Stack(controls=puzzle._controls, width=page.width, height=page.height)
         )
         puzzle.shuffle_pieces()
         page.update()
 
     page.on_resize = page_resize
     puzzle = EasyPuzzle(page)
-    page.add(ft.Stack(controls=puzzle.controls, width=page.width, height=page.height))
+    page.add(ft.Stack(controls=puzzle._controls, width=page.width, height=page.height))
     puzzle.shuffle_pieces()
 
 
