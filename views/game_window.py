@@ -2,36 +2,32 @@ import flet as ft
 from models.easy_puzzle import EasyPuzzle
 from models.medium_puzzle import MediumPuzzle
 from models.hard_puzzle import HardPuzzle
+from views.puzzle_view import PuzzleView
 
 
-def GameWindow(content: ft.Column, difficulty: str):
+def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
     content.controls.clear()
 
     # Cria o puzzle conforme a dificuldade escolhida
     if difficulty == "Fácil":
-        puzzle = EasyPuzzle()
+        puzzle_model = EasyPuzzle()
     elif difficulty == "Médio":
-        puzzle = MediumPuzzle()
+        puzzle_model = MediumPuzzle()
+    elif difficulty == "Difícil":
+        puzzle_model = HardPuzzle()
     else:
-        puzzle = HardPuzzle()
+        puzzle_model = EasyPuzzle()
+    
+    puzzle_view = PuzzleView(page, puzzle_model)
 
-    # Cria a área de jogo com Stack
-    game_area = ft.Stack(
-        controls=puzzle.controls,
-        width=800,
-        height=600
+    stack = ft.Stack(
+        controls=puzzle_view.controls,
+        width=page.width,
+        height=page.height,
+        expand=True
     )
+    content.controls.append(stack)
 
-    content.controls.append(
-        ft.Column(
-            controls=[
-                ft.Text(f"🧩 Jogo - {difficulty}", size=24, weight=ft.FontWeight.BOLD),
-                game_area
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
-        )
-    )
+    page.update()
 
-    # Embaralhar peças ao iniciar
-    puzzle._shuffle_pieces()
+    puzzle_view.shuffle_pieces()
