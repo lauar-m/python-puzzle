@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from models.piece import Piece
 import random
+import flet as ft
 
 
 class Puzzle(ABC):
@@ -8,12 +10,12 @@ class Puzzle(ABC):
     PIECES_PER_ROW = 8
 
     def __init__(self):
-        self.slots = []
-        self.pieces = []
-        self.pieces_positions = {}
-        self.board_top = 0
-        self.board_left = 0
-        self.pieces_area = {}
+        self._slots = []
+        self._pieces = []
+        self._pieces_positions = {}
+        self._board_top = 0
+        self._board_left = 0
+        self._pieces_area = {}
 
     @property
     @abstractmethod
@@ -21,7 +23,7 @@ class Puzzle(ABC):
         """Retorna o tamanho do grid (NxN)"""
         pass
 
-    def calculate_layout(self, page_width, page_height):
+    def _calculate_layout(self, page_width: float, page_height: float):
         board_width = self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)
         board_height = self.grid_size * (self.CELL_SIZE + self.CELL_SPACING)
 
@@ -34,47 +36,46 @@ class Puzzle(ABC):
         total_width = board_width + space_between + pieces_width
 
         base_left = (page_width - total_width) / 2
-        self.board_left = base_left
-        self.board_top = (page_height - board_height) / 3
+        self._board_left = base_left
+        self._board_top = (page_height - board_height) / 3
 
-        self.pieces_area = {
-            "top": self.board_top,
-            "left": self.board_left + board_width + space_between,
+        self._pieces_area = {
+            "top": self._board_top,
+            "left": self._board_left + board_width + space_between,
         }
 
-    def register_slot(self, slot):
-        self.slots.append(slot)
+    def _register_slot(self, slot: ft.Container):
+        self._slots.append(slot)
 
-    def register_piece(self, piece):
-        self.pieces.append(piece)
+    def _register_piece(self, piece: Piece):
+        self._pieces.append(piece)
 
-    def set_piece_position(self, slot, piece):
-        self.pieces_positions[slot] = piece
+    def _set_piece_position(self, slot: ft.Container, piece: Piece):
+        self._pieces_positions[slot] = piece
 
-    def clear_piece_position(self, piece):
-        for slot in self.slots:
-            if self.pieces_positions.get(slot) == piece:
-                del self.pieces_positions[slot]
+    def _clear_piece_position(self, piece: Piece):
+        for slot in self._slots:
+            if self._pieces_positions.get(slot) == piece:
+                del self._pieces_positions[slot]
                 break
 
-    def check_solution(self) -> bool:
-        for i, slot in enumerate(self.slots):
-            piece = self.pieces_positions.get(slot)
+    def _check_solution(self) -> bool:
+        for i, slot in enumerate(self._slots):
+            piece = self._pieces_positions.get(slot)
             if piece is None or piece.model.number != i + 1:
                 return False
         return True
 
-    def shuffle_pieces(self):
-        random.shuffle(self.pieces)
-        total = len(self.pieces)
-        for i, piece in enumerate(self.pieces):
+    def _shuffle_pieces(self):
+        random.shuffle(self._pieces)
+        for i, piece in enumerate(self._pieces):
             row = i // self.PIECES_PER_ROW
             col = i % self.PIECES_PER_ROW
 
-            new_top = self.pieces_area["top"] + (
+            new_top = self._pieces_area["top"] + (
                 row * (self.CELL_SIZE + self.CELL_SPACING)
             )
-            new_left = self.pieces_area["left"] + (
+            new_left = self._pieces_area["left"] + (
                 col * (self.CELL_SIZE + self.CELL_SPACING)
             )
 

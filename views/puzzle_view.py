@@ -22,7 +22,7 @@ class PuzzleView(ABC):
             image_url, self.model.grid_size
         )
 
-        self.model.calculate_layout(page.width, page.height)
+        self.model._calculate_layout(page.width, page.height)
 
         self._create_board()
         self._create_pieces(image_pieces)
@@ -40,15 +40,15 @@ class PuzzleView(ABC):
                     ),
                     width=self.model.CELL_SIZE,
                     height=self.model.CELL_SIZE,
-                    left=self.model.board_left
+                    left=self.model._board_left
                     + (j * (self.model.CELL_SIZE + self.model.CELL_SPACING)),
-                    top=self.model.board_top
+                    top=self.model._board_top
                     + (i * (self.model.CELL_SIZE + self.model.CELL_SPACING)),
                     border=ft.border.all(1),
                     alignment=ft.alignment.center,
                 )
                 self.slots.append(slot)
-                self.model.register_slot(slot)
+                self.model._register_slot(slot)
                 number += 1
 
     def _create_pieces(self, image_pieces: list[BytesIO]):
@@ -61,9 +61,9 @@ class PuzzleView(ABC):
 
             piece_model = Piece(
                 number=i + 1,
-                original_top=self.model.pieces_area["top"]
+                original_top=self.model._pieces_area["top"]
                 + (row * (self.model.CELL_SIZE + self.model.CELL_SPACING)),
-                original_left=self.model.pieces_area["left"]
+                original_left=self.model._pieces_area["left"]
                 + (col * (self.model.CELL_SIZE + self.model.CELL_SPACING)),
                 image_bytes=image_pieces[i],
             )
@@ -72,7 +72,7 @@ class PuzzleView(ABC):
             piece_view.setup_drag_handlers(self)
 
             self.pieces.append(piece_view)
-            self.model.register_piece(piece_view)
+            self.model._register_piece(piece_view)
 
     def move_on_top(self, control):
         self.controls.remove(control)
@@ -98,22 +98,22 @@ class PuzzleView(ABC):
             ):
                 # Verifica se o slot já está ocupado
                 if (
-                    slot in self.model.pieces_positions
-                    and self.model.pieces_positions[slot] != piece
+                    slot in self.model._pieces_positions
+                    and self.model._pieces_positions[slot] != piece
                 ):
                     break
 
                 piece.place_at(slot.top, slot.left)
-                self.model.set_piece_position(slot, piece)
+                self.model._set_piece_position(slot, piece)
                 found_slot = True
                 return
 
         if not found_slot:
             piece.return_to_original_position()
-            self.model.clear_piece_position(piece)
+            self.model._clear_piece_position(piece)
 
     def check_solution(self) -> bool:
-        return self.model.check_solution()
+        return self.model._check_solution()
 
     def shuffle_pieces(self):
-        self.model.shuffle_pieces()
+        self.model._shuffle_pieces()

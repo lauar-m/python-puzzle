@@ -9,7 +9,7 @@ class PieceView:
         self.page = page
         self.model = model
 
-        image_src = self.__convert_image_to_base64(model.image_bytes)
+        image_src = self.__convert_image_to_base64(model._image_bytes)
 
         self.__container = ft.Container(
             content=ft.Stack(

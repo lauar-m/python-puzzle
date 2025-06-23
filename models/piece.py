@@ -14,7 +14,7 @@ class Piece:
         self._original_left = original_left
         self._start_top = 0
         self._start_left = 0
-        self.image_bytes = image_bytes
+        self._image_bytes = image_bytes
 
     @property
     def original_top(self):
