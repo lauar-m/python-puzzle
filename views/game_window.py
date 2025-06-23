@@ -34,4 +34,4 @@ def GameWindow(content: ft.Column, difficulty: str):
     )
 
     # Embaralhar peças ao iniciar
-    puzzle.shuffle_pieces()
+    puzzle._shuffle_pieces()
