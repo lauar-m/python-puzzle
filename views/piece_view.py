@@ -1,11 +1,11 @@
 import flet as ft
 import base64
 from io import BytesIO
-from models.piece_model import PieceModel
+from models.piece import Piece
 
 
 class PieceView:
-    def __init__(self, page: ft.Page, model: PieceModel):
+    def __init__(self, page: ft.Page, model: Piece):
         self.page = page
         self.model = model
 

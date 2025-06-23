@@ -2,14 +2,14 @@ import flet as ft
 import math
 from io import BytesIO
 from abc import ABC
-from models.puzzle_model import PuzzleModel
-from models.piece_model import PieceModel
+from models.puzzle import Puzzle
+from models.piece import Piece
 from views.piece_view import PieceView
 from utils.image_fetcher import ImageFetcher
 
 
 class PuzzleView(ABC):
-    def __init__(self, page: ft.Page, model: PuzzleModel):
+    def __init__(self, page: ft.Page, model: Puzzle):
         self.page = page
         self.model = model
 
@@ -59,7 +59,7 @@ class PuzzleView(ABC):
             row = i // pieces_per_row
             col = i % pieces_per_row
 
-            piece_model = PieceModel(
+            piece_model = Piece(
                 number=i + 1,
                 original_top=self.model.pieces_area["top"]
                 + (row * (self.model.CELL_SIZE + self.model.CELL_SPACING)),

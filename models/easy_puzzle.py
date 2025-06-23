@@ -1,7 +1,7 @@
-from models.puzzle_model import PuzzleModel
+from models.puzzle import Puzzle
 
 
-class EasyPuzzle(PuzzleModel):
+class EasyPuzzle(Puzzle):
     @property
     def grid_size(self) -> int:
         return 3
