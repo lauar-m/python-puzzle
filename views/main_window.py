@@ -43,7 +43,7 @@ def MainWindow(content: ft.Column, reload):
                                     ft.Icons.PLAY_ARROW,
                                     color=SECONDARY_COLOR,
                                     largura=200,
-                                    action=lambda e: reload("game", difficulty="Fácil"),
+                                    action=lambda e: reload("difficulty"),
                                 )
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
