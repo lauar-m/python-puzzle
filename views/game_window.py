@@ -20,14 +20,25 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
     
     puzzle_view = PuzzleView(page, puzzle_model)
 
-    stack = ft.Stack(
+    puzzle_stack = ft.Stack(
         controls=puzzle_view.controls,
-        width=page.width,
-        height=page.height,
-        expand=True
+        expand=True,
     )
-    content.controls.append(stack)
-
+    
+    container = ft.Container(
+        content=puzzle_stack,
+        expand=True,
+        padding=20,
+    )
+    
+    content.controls.append(container)
     page.update()
 
     puzzle_view.shuffle_pieces()
+    
+    def on_resize(e):
+        puzzle_model._calculate_layout(page.width, page.height)
+        puzzle_view.shuffle_pieces()
+        page.update()
+    
+    page.on_resize = on_resize
