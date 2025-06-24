@@ -3,6 +3,8 @@ from views.main_window import MainWindow
 from views.played_games_window import PlayedGamesWindow
 from views.login_window import LoginWindow
 from views.game_window import GameWindow
+from views.difficulty_window import DifficultyWindow
+
 from utils.components import (
     create_button,
     TEXT_COLOR,
@@ -34,7 +36,7 @@ def main(page: ft.Page):
         spacing=25,
     )
 
-    def reload_window(window_name: str, user: User = None):
+    def reload_window(window_name: str, user: User = None, difficulty: str = "Fácil"):
         content.controls.clear()
         if user:
             logged_user["name"] = user.username
@@ -48,7 +50,9 @@ def main(page: ft.Page):
         elif window_name == "login":
             LoginWindow(content, on_success=lambda user: reload_window("home", user))
         elif window_name == "game":
-            GameWindow(content, difficulty="Fácil")
+            GameWindow(page, content, difficulty=difficulty)
+        elif window_name == "difficulty":
+            DifficultyWindow(page, content, reload=reload_window)
 
         page.controls.clear()
         page.add(build_layout())
@@ -102,6 +106,11 @@ def main(page: ft.Page):
                                             ft.Icons.GAMES,
                                             lambda e: reload_window("played_games"),
                                         ),
+                                        create_button(
+                                            "Jogar",
+                                            ft.Icons.PLAY_ARROW,
+                                            lambda e: reload_window("difficulty"),
+                                        ),
                                     ],
                                 ),
                             ),
@@ -126,6 +135,7 @@ def main(page: ft.Page):
                                             color="white",
                                             size=16,
                                             weight=ft.FontWeight.BOLD,
+                                            expand=True,
                                         ),
                                     ],
                                 ),

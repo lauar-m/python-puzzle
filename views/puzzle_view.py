@@ -16,6 +16,7 @@ class PuzzleView(ABC):
         self.slots = []
         self.pieces: list[PieceView] = []
         self.controls = []
+        self.dragging_piece = None
 
         image_url = ImageFetcher.fetch_random_image()
         image_pieces = ImageFetcher.split_image_from_url(
@@ -87,7 +88,6 @@ class PuzzleView(ABC):
     def drag(self, e: ft.DragUpdateEvent):
         e.control.top = max(0, e.control.top + e.delta_y)
         e.control.left = max(0, e.control.left + e.delta_x)
-        e.control.update()
 
     def drop(self, e: ft.DragEndEvent, piece: PieceView):
         found_slot = False
@@ -106,11 +106,14 @@ class PuzzleView(ABC):
                 piece.place_at(slot.top, slot.left)
                 self.model._set_piece_position(slot, piece)
                 found_slot = True
-                return
+                break
 
         if not found_slot:
             piece.return_to_original_position()
             self.model._clear_piece_position(piece)
+        
+        self.dragging_piece = None
+        self.page.update()
 
     def check_solution(self) -> bool:
         return self.model._check_solution()

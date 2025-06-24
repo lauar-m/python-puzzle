@@ -34,7 +34,7 @@ class PieceView:
 
         self.gesture_detector = ft.GestureDetector(
             mouse_cursor=ft.MouseCursor.MOVE,
-            drag_interval=5,
+            drag_interval=1,
             left=model.original_left,
             top=model.original_top,
             content=self.__container,
@@ -61,8 +61,6 @@ class PieceView:
     def place_at(self, top: int, left: int):
         self.gesture_detector.top = top
         self.gesture_detector.left = left
-        self.gesture_detector.update()
 
     def return_to_original_position(self):
         self.place_at(self.model.original_top, self.model.original_left)
-        self.page.update()

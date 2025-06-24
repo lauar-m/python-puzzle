@@ -7,7 +7,7 @@ import flet as ft
 class Puzzle(ABC):
     CELL_SIZE = 70
     CELL_SPACING = 2
-    PIECES_PER_ROW = 8
+    PIECES_PER_ROW = 5
 
     def __init__(self):
         self._slots = []
