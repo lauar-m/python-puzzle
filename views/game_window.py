@@ -3,6 +3,7 @@ from models.easy_puzzle import EasyPuzzle
 from models.medium_puzzle import MediumPuzzle
 from models.hard_puzzle import HardPuzzle
 from views.puzzle_view import PuzzleView
+from utils.components import create_button, SECONDARY_COLOR
 
 
 def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
@@ -20,13 +21,55 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
     
     puzzle_view = PuzzleView(page, puzzle_model)
 
-    puzzle_stack = ft.Stack(
-        controls=puzzle_view.controls,
-        expand=True,
+    # Função para verificar se o puzzle foi resolvido
+    def check_puzzle(e):
+        if puzzle_view.check_solution():
+            show_dialog("Parabéns! 🎉", "Você completou o puzzle com sucesso!")
+        else:
+            show_dialog("Atenção", "Algumas peças ainda não estão no lugar correto. Continue tentando!")
+
+    # Função para mostrar diálogo
+    def show_dialog(title, message):
+        dlg = ft.AlertDialog(
+            title=ft.Text(title),
+            content=ft.Text(message),
+            on_dismiss=lambda e: print("Dialog dismissed!")
+        )
+        page.dialog = dlg
+        dlg.open = True
+        page.update()
+        
+    # Botão para verificar se o puzzle foi resolvido
+    check_puzzle_button = create_button(
+        "Verificar jogo",
+        ft.Icons.CHECK,
+        color=SECONDARY_COLOR,
+        largura=200,
+        action=check_puzzle,
     )
-    
+
     container = ft.Container(
-        content=puzzle_stack,
+        content=ft.Column(
+            controls=[
+                ft.Container(
+                    content=ft.Stack(  # tabuleiro e peças
+                        controls=puzzle_view.controls,
+                        width=page.width - 80,
+                        height=page.height,
+                    ),
+                    expand=True,
+                ),
+                ft.Container(  # botão abaixo do jogo, centralizado
+                    content=check_puzzle_button,
+                    alignment=ft.alignment.center,
+                    padding=20,
+                ),
+            ],
+            scroll=ft.ScrollMode.AUTO,
+            alignment=ft.MainAxisAlignment.START,
+            expand=True,
+            spacing=10,
+        ),
         expand=True,
         padding=20,
     )
