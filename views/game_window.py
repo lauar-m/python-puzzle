@@ -24,6 +24,7 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
         puzzle_height = page.height - 200
     
     puzzle_view = PuzzleView(page, puzzle_model)
+    
 
     # Função para verificar se o puzzle foi resolvido
     def check_puzzle(e):
@@ -34,15 +35,19 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
 
     # Função para mostrar diálogo
     def show_dialog(title, message):
-        dlg = ft.AlertDialog(
-            title=ft.Text(title),
-            content=ft.Text(message),
-            on_dismiss=lambda e: print("Dialog dismissed!")
-        )
-        page.dialog = dlg
+        dlg.title = ft.Text(title)
+        dlg.content = ft.Text(message)
         dlg.open = True
         page.update()
         
+
+    dlg = ft.AlertDialog(
+    title=ft.Text(""),
+    content=ft.Text(""),
+    )
+    page.dialog = dlg
+    page.overlay.append(dlg)
+    
     # Botão para verificar se o puzzle foi resolvido
     check_puzzle_button = create_button(
         "Verificar jogo",
