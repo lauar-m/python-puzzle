@@ -12,12 +12,16 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
     # Cria o puzzle conforme a dificuldade escolhida
     if difficulty == "Fácil":
         puzzle_model = EasyPuzzle()
+        puzzle_height = page.height - 200
     elif difficulty == "Médio":
         puzzle_model = MediumPuzzle()
+        puzzle_height = page.height - 200
     elif difficulty == "Difícil":
         puzzle_model = HardPuzzle()
+        puzzle_height = 900
     else:
         puzzle_model = EasyPuzzle()
+        puzzle_height = page.height - 200
     
     puzzle_view = PuzzleView(page, puzzle_model)
 
@@ -55,7 +59,7 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
                     content=ft.Stack(  # tabuleiro e peças
                         controls=puzzle_view.controls,
                         width=page.width - 80,
-                        height=page.height,
+                        height=puzzle_height
                     ),
                     expand=True,
                 ),
