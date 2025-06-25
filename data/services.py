@@ -174,6 +174,26 @@ class PuzzleHistoryService:
             return False, "database error"
         finally:
             session.close()
+    
+    @classmethod
+    def get_best_times(cls, difficulty: Difficulty) -> tuple[list[PuzzleHistory, Optional[str]]]:
+        """Gets best playing times per difficulty"""
+        session = DatabaseManager.get_session()
+        try:
+            best_times = (
+                session.query(PuzzleHistory)
+                .options(joinedload(PuzzleHistory.user))
+                .filter_by(difficulty=difficulty.value)
+                .order_by(PuzzleHistory.solving_time.asc())
+                .limit(3)
+                .all()
+            )
+            return best_times, None
+        except SQLAlchemyError as e:
+            print(f"database error getting : {e}")
+            return None, "database error"
+        finally:
+            session.close()
 
 
 class AuthService:
