@@ -19,6 +19,7 @@ class PuzzleView(ABC):
         self.dragging_piece = None
 
         image_url = ImageFetcher.fetch_random_image()
+        self.image_bin = ImageFetcher.get_image_bin(image_url=image_url)
         image_pieces = ImageFetcher.split_image_from_url(
             image_url, self.model.grid_size
         )

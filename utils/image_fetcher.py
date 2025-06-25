@@ -59,3 +59,19 @@ class ImageFetcher:
                 pieces.append(byte_io)
 
         return pieces
+
+    @classmethod
+    def get_image_bin(cls, image_url) -> bytes:
+        response = requests.get(image_url)
+        response.raise_for_status()
+
+        img = Image.open(BytesIO(response.content))
+        widht, height = img.size
+
+        # Recortar imagem para tamanho mínimo dividível pelo grid
+        min_dim = min(widht, height)
+        img = img.crop((0, 0, min_dim, min_dim))  # quadrado
+
+        byte_io = BytesIO()
+        img.save(byte_io, format="PNG")
+        return byte_io.getvalue()

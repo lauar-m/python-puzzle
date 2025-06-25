@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, LargeBinary
 from sqlalchemy.orm import declarative_base, relationship
 import enum
-import datetime
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 Base = declarative_base()
 
@@ -30,7 +31,7 @@ class PuzzleHistory(Base):
     id = Column(Integer, primary_key=True)
     image = Column(LargeBinary, nullable=False)
     solving_time = Column(Integer, nullable=False)
-    played_date = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    played_date = Column(DateTime, default=datetime.now(ZoneInfo("America/Sao_Paulo")), nullable=False)
     difficulty = Column(Enum(Difficulty), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 

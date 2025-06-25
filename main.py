@@ -39,6 +39,7 @@ def main(page: ft.Page):
     def reload_window(window_name: str, user: User = None, difficulty: str = "Fácil"):
         content.controls.clear()
         if user:
+            logged_user["user"] = user
             logged_user["name"] = user.username
 
         current_window["name"] = window_name
@@ -46,13 +47,21 @@ def main(page: ft.Page):
         if window_name == "home":
             MainWindow(content, reload_window)
         elif window_name == "played_games":
-            PlayedGamesWindow(content)
+            PlayedGamesWindow(
+                content, 
+                user=user or logged_user.get("user")
+            )
         elif window_name == "login":
             LoginWindow(content, on_success=lambda user: reload_window("home", user))
         elif window_name == "game":
-            GameWindow(page, content, difficulty=difficulty)
+            GameWindow(
+                page, 
+                content, 
+                difficulty=difficulty, 
+                user=user or logged_user.get("user")
+            )
         elif window_name == "difficulty":
-            DifficultyWindow(page, content, reload=reload_window)
+            DifficultyWindow(page, content, reload=reload_window, user=user)
 
         page.controls.clear()
         page.add(build_layout())

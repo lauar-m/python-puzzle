@@ -111,7 +111,8 @@ class UserService:
 class PuzzleHistoryService:
     @classmethod
     def add_puzzle_history(
-        cls, user_id: int, solving_time: int, image: str, difficulty: Difficulty
+        cls, user_id: int, solving_time: int, image: str,
+        difficulty: Difficulty
     ) -> tuple[Optional[PuzzleHistory], Optional[str]]:
         """Adds a new puzzle history record"""
         session = DatabaseManager.get_session()
