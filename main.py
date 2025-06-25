@@ -57,7 +57,8 @@ def main(page: ft.Page):
             GameWindow(
                 page, 
                 content, 
-                difficulty=difficulty, 
+                difficulty=difficulty,
+                reload=reload_window,
                 user=user or logged_user.get("user")
             )
         elif window_name == "difficulty":

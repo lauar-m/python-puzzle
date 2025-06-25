@@ -12,9 +12,7 @@ def PlayedGamesWindow(content: ft.Column, user: User):
         spacing=20, run_spacing=20, alignment=ft.MainAxisAlignment.START
     )
 
-    print(played_games_data)
     for played_game in played_games_data[0]:
-        print(played_game)
         difficulty = "Fácil"
         if played_game.difficulty == Difficulty.medium.value:
             difficulty = "Médio"

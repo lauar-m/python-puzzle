@@ -9,24 +9,28 @@ from data.services import PuzzleHistoryService
 from data.schemas import User, Difficulty
 
 
-def GameWindow(page: ft.Page, content: ft.Column, difficulty: str, user: User):
+def GameWindow(page: ft.Page, content: ft.Column, difficulty: str, user: User, reload):
     content.controls.clear()
 
     # Cria o puzzle conforme a dificuldade escolhida
     difficulty_enum = Difficulty.easy.value
     if difficulty == "Fácil":
         puzzle_model = EasyPuzzle()
+        puzzle_height = page.height - 200
     elif difficulty == "Médio":
         puzzle_model = MediumPuzzle()
         difficulty_enum = Difficulty.medium.value
+        puzzle_height = page.height - 200
     elif difficulty == "Difícil":
         puzzle_model = HardPuzzle()
         difficulty_enum = Difficulty.hard.value
+        puzzle_height = 900
     else:
         puzzle_model = EasyPuzzle()
+        puzzle_height = page.height - 200
 
     puzzle_view = PuzzleView(page, puzzle_model)
-
+    
     # Função para verificar se o puzzle foi resolvido
     def check_puzzle(e):
         if puzzle_view.check_solution():
@@ -39,21 +43,45 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str, user: User):
                 image=puzzle_view.image_bin,
                 difficulty=difficulty_enum
             )
-            show_dialog("Parabéns! 🎉", f"Você completou o puzzle com sucesso! Seu tempo foi de {elapsed_time_str}")
+            show_dialog("Parabéns! 🎉", f"Você completou o puzzle com sucesso! Seu tempo foi de {elapsed_time_str}", success=True)
+            # modal com imagem do puzzle resolvido, tempo e botão para voltar ao menu
         else:
-            show_dialog("Atenção", "Algumas peças ainda não estão no lugar correto. Continue tentando!")
+            show_dialog("Atenção", "Algumas peças ainda não estão no lugar correto. Continue tentando!", success=False)
 
     # Função para mostrar diálogo
-    def show_dialog(title, message):
-        dlg = ft.AlertDialog(
-            title=ft.Text(title),
-            content=ft.Text(message),
-            on_dismiss=lambda e: print("Dialog dismissed!")
-        )
-        page.dialog = dlg
+    def show_dialog(title, message, success):
+        dlg.title = ft.Text(title)
+        dlg.content = ft.Text(message)
+        if success:
+            # Botão que volta para a home
+            dlg.actions = [
+                ft.TextButton("Voltar ao Menu", on_click=lambda e: close_and_go_home(e)),
+            ]
+        else:
+            # Botão que apenas fecha o diálogo
+            dlg.actions = [
+                ft.TextButton("OK", on_click=lambda e: close_dialog())
+            ]
+
         dlg.open = True
         page.update()
 
+    def close_and_go_home(e):
+        dlg.open = False
+        page.update()
+        reload("home")
+
+    def close_dialog():
+        dlg.open = False
+        page.update()
+
+    dlg = ft.AlertDialog(
+        title=ft.Text(""),
+        content=ft.Text(""),
+    )
+    page.dialog = dlg
+    page.overlay.append(dlg)
+    
     # Botão para verificar se o puzzle foi resolvido
     check_puzzle_button = create_button(
         "Verificar jogo",
@@ -70,7 +98,7 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str, user: User):
                     content=ft.Stack(  # tabuleiro e peças
                         controls=puzzle_view.controls,
                         width=page.width - 80,
-                        height=page.height,
+                        height=puzzle_height
                     ),
                     expand=True,
                 ),
