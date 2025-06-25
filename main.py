@@ -50,7 +50,7 @@ def main(page: ft.Page):
         elif window_name == "login":
             LoginWindow(content, on_success=lambda user: reload_window("home", user))
         elif window_name == "game":
-            GameWindow(page, content, difficulty=difficulty)
+            GameWindow(page, content, difficulty=difficulty, reload=reload_window)
         elif window_name == "difficulty":
             DifficultyWindow(page, content, reload=reload_window)
 

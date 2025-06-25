@@ -6,7 +6,7 @@ from views.puzzle_view import PuzzleView
 from utils.components import create_button, SECONDARY_COLOR
 
 
-def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
+def GameWindow(page: ft.Page, content: ft.Column, difficulty: str, reload):
     content.controls.clear()
 
     # Cria o puzzle conforme a dificuldade escolhida
@@ -29,17 +29,37 @@ def GameWindow(page: ft.Page, content: ft.Column, difficulty: str):
     # Função para verificar se o puzzle foi resolvido
     def check_puzzle(e):
         if puzzle_view.check_solution():
-            show_dialog("Parabéns! 🎉", "Você completou o puzzle com sucesso!")
+            show_dialog("Parabéns! 🎉", "Você completou o puzzle com sucesso!", success=True)
+            # modal com imagem do puzzle resolvido, tempo e botão para voltar ao menu
         else:
-            show_dialog("Atenção", "Algumas peças ainda não estão no lugar correto. Continue tentando!")
+            show_dialog("Atenção", "Algumas peças ainda não estão no lugar correto. Continue tentando!", success=False)
 
     # Função para mostrar diálogo
-    def show_dialog(title, message):
+    def show_dialog(title, message, success):
         dlg.title = ft.Text(title)
         dlg.content = ft.Text(message)
+        if success:
+            # Botão que volta para a home
+            dlg.actions = [
+                ft.TextButton("Voltar ao Menu", on_click=lambda e: close_and_go_home(e)),
+            ]
+        else:
+            # Botão que apenas fecha o diálogo
+            dlg.actions = [
+                ft.TextButton("OK", on_click=lambda e: close_dialog())
+            ]
+
         dlg.open = True
         page.update()
-        
+
+    def close_and_go_home(e):
+            dlg.open = False
+            page.update()
+            reload("home")
+
+    def close_dialog():
+        dlg.open = False
+        page.update()
 
     dlg = ft.AlertDialog(
     title=ft.Text(""),
