@@ -86,6 +86,7 @@ class PuzzleView(ABC):
     def drag(self, e: ft.DragUpdateEvent):
         e.control.top = max(0, e.control.top + e.delta_y)
         e.control.left = max(0, e.control.left + e.delta_x)
+        self.page.update()
 
     def drop(self, e: ft.DragEndEvent, piece: PieceView):
         found_slot = False
