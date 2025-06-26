@@ -15,17 +15,6 @@ class PieceView:
             content=ft.Stack(
                 [
                     ft.Image(src=image_src, width=70, height=70, fit=ft.ImageFit.COVER),
-                    ft.Container(
-                        content=ft.Text(
-                            value=str(model.number),
-                            size=20,
-                            color=ft.Colors.WHITE,
-                            weight=ft.FontWeight.BOLD,
-                        ),
-                        alignment=ft.alignment.center,
-                        width=70,
-                        height=70,
-                    ),
                 ]
             ),
             width=70,

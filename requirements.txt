@@ -1,13 +1,14 @@
 annotated-types==0.7.0
 anyio==4.9.0
+bcrypt==4.3.0
 certifi==2025.4.26
 charset-normalizer==3.4.2
 click==8.2.1
 fastapi==0.115.12
 flet==0.28.3
-greenlet==3.2.3
 flet-desktop==0.28.3
 flet-web==0.28.3
+greenlet==3.2.3
 h11==0.16.0
 httpcore==1.0.9
 httptools==0.6.4
