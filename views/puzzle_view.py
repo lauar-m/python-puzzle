@@ -37,9 +37,9 @@ class PuzzleView(ABC):
         for i in range(size):
             for j in range(size):
                 slot = ft.Container(
-                    content=ft.Text(
-                        value=str(number), size=24, color=ft.Colors.BLACK
-                    ),
+                    # content=ft.Text(
+                    #     value=str(number), size=24, color=ft.Colors.BLACK
+                    # ),
                     width=self.model.CELL_SIZE,
                     height=self.model.CELL_SIZE,
                     left=self.model._board_left
@@ -97,13 +97,14 @@ class PuzzleView(ABC):
                 abs(e.control.top - slot.top) < 20
                 and abs(e.control.left - slot.left) < 20
             ):
-                # Verifica se o slot já está ocupado
+                # Verifica se o slot já está ocupado por outra peça
                 if (
                     slot in self.model._pieces_positions
                     and self.model._pieces_positions[slot] != piece
                 ):
-                    break
+                    continue  # tenta os outros slots
 
+                self.model._clear_piece_position(piece)
                 piece.place_at(slot.top, slot.left)
                 self.model._set_piece_position(slot, piece)
                 found_slot = True
@@ -115,6 +116,7 @@ class PuzzleView(ABC):
         
         self.dragging_piece = None
         self.page.update()
+
 
     def check_solution(self) -> bool:
         return self.model._check_solution()

@@ -12,7 +12,7 @@ class ImageFetcher:
     def fetch_random_image(cls, query=None):
         headers = {"Authorization": f"Client-ID {cls.ACCESS_KEY}"}
         params = {
-            "query": query or "nature",
+            "query": query or "cats",
         }
 
         try:
