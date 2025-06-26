@@ -37,9 +37,6 @@ class PuzzleView(ABC):
         for i in range(size):
             for j in range(size):
                 slot = ft.Container(
-                    # content=ft.Text(
-                    #     value=str(number), size=24, color=ft.Colors.BLACK
-                    # ),
                     width=self.model.CELL_SIZE,
                     height=self.model.CELL_SIZE,
                     left=self.model._board_left
