@@ -185,7 +185,7 @@ class PuzzleHistoryService:
                 .options(joinedload(PuzzleHistory.user))
                 .filter_by(difficulty=difficulty.value)
                 .order_by(PuzzleHistory.solving_time.asc())
-                .limit(3)
+                .limit(5)
                 .all()
             )
             return best_times, None
