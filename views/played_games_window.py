@@ -74,8 +74,8 @@ def PlayedGamesWindow(content: ft.Column, user: User):
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 ft.Text(
-                    "📊 Seu Histórico",
-                    size=24,
+                    "📊 HISTÓRICO",
+                    size=28,
                     weight=ft.FontWeight.BOLD,
                     color=TEXT_COLOR,
                 ),

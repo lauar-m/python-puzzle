@@ -14,7 +14,7 @@ def MainWindow(content: ft.Column, reload):
 
             items.append(
                 ft.ListTile(
-                    leading=ft.Text(f"{i + 1}º", size=16, weight=ft.FontWeight.BOLD),
+                    leading=ft.Text(f"{i + 1}º", size=18, weight=ft.FontWeight.BOLD),
                     title=ft.Text(record.user.username, weight=ft.FontWeight.W_500),
                     trailing=ft.Text(f"{formatted_time}", color=TEXT_COLOR),
                 )
@@ -28,7 +28,7 @@ def MainWindow(content: ft.Column, reload):
 
     content.controls.extend(
         [
-            ft.Text("🏆 RANKING", size=24, weight=ft.FontWeight.BOLD, color=TEXT_COLOR),
+            ft.Text("🏆 RANKING", size=28, weight=ft.FontWeight.BOLD, color=TEXT_COLOR),
             ft.Row(
                 controls=[
                     create_card("Fácil", render_ranking(ranking_easy)),
