@@ -2,29 +2,36 @@ import base64
 import flet as ft
 from utils.components import SECONDARY_COLOR, TEXT_COLOR
 from data.services import PuzzleHistoryService
-from data.schemas import User, Difficulty, PuzzleHistory
+from data.schemas import User, Difficulty
 
 
 def PlayedGamesWindow(content: ft.Column, user: User):
-    played_games_data: list[PuzzleHistory] = PuzzleHistoryService.get_puzzle_histories_for_user(user.id)
+    played_games_data, error = PuzzleHistoryService.get_puzzle_histories_for_user(user.id)
+
+    if played_games_data is None:
+        content.controls.append(
+            ft.Text("Erro ao carregar o histórico de jogos.", color="red")
+        )
+        return
 
     row = ft.ResponsiveRow(
         spacing=20, run_spacing=20, alignment=ft.MainAxisAlignment.START
     )
 
-    for played_game in played_games_data[0]:
+    for played_game in played_games_data:
         difficulty = "Fácil"
-        if played_game.difficulty == Difficulty.medium.value:
+        if played_game.difficulty == Difficulty.medium:
             difficulty = "Médio"
-        elif played_game.difficulty == Difficulty.hard.value:
+        elif played_game.difficulty == Difficulty.hard:
             difficulty = "Difícil"
-        
+
         total_seconds = played_game.solving_time
         minutes = total_seconds // 60
         seconds = total_seconds % 60
         formatted_time = f"{minutes:02}:{seconds:02}"
 
         formatted_date = played_game.played_date.strftime("%d/%m/%Y %H:%M")
+
         image_data = base64.b64encode(played_game.image).decode("utf-8")
         image_src = f"data:image/png;base64,{image_data}"
 
